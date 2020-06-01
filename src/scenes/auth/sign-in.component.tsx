@@ -1,14 +1,15 @@
 import React from 'react';
 import { ImageBackground, StyleSheet, View } from 'react-native';
-import { Button, CheckBox, Layout, LayoutElement } from '@ui-kitten/components';
+import { Button, CheckBox, Layout } from '@ui-kitten/components';
 import { Formik, FormikProps } from 'formik';
 import { SignInScreenProps } from '../../navigation/auth.navigator';
 import { AppRoute } from '../../navigation/app-routes';
 import { FormInput } from '../../components/form-input.component';
 import { EyeIcon, EyeOffIcon } from '../../assets/icons';
 import { SignInData, SignInSchema } from '../../data/sign-in.model';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-export const SignInScreen = (props: SignInScreenProps): LayoutElement => {
+export const SignInScreen = (props: SignInScreenProps) => {
 
   const [shouldRemember, setShouldRemember] = React.useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
@@ -33,6 +34,15 @@ export const SignInScreen = (props: SignInScreenProps): LayoutElement => {
     setPasswordVisible(!passwordVisible);
   };
 
+  const renderPasswordIcon = (props): React.ReactElement => {
+    const IconComponent = passwordVisible ? EyeIcon : EyeOffIcon;
+    return (
+      <TouchableWithoutFeedback onPress={onPasswordIconPress}>
+        <IconComponent {...props} />
+      </TouchableWithoutFeedback>
+    );
+  };
+
   const renderForm = (props: FormikProps<SignInData>): React.ReactFragment => (
     <React.Fragment>
       <FormInput
@@ -46,16 +56,15 @@ export const SignInScreen = (props: SignInScreenProps): LayoutElement => {
         style={styles.formControl}
         placeholder='Password'
         secureTextEntry={!passwordVisible}
-        icon={passwordVisible ? EyeIcon : EyeOffIcon}
-        onIconPress={onPasswordIconPress}
+        accessoryRight={renderPasswordIcon}
       />
       <View style={styles.resetPasswordContainer}>
         <CheckBox
           style={styles.formControl}
           checked={shouldRemember}
-          onChange={setShouldRemember}
-          text='Remember Me'
-        />
+          onChange={setShouldRemember}>
+          Remember Me
+        </CheckBox>
         <Button
           appearance='ghost'
           status='basic'

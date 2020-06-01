@@ -1,8 +1,16 @@
 import React from 'react';
-import { Drawer, DrawerItem, DrawerElement, DrawerItemElement, IndexPath } from '@ui-kitten/components';
-import { SafeAreaLayout, SaveAreaInset } from '../../components/safe-area-layout.component';
+import { ImageBackground, ImageBackgroundProps, StyleSheet } from 'react-native';
+import { Drawer, DrawerElement, DrawerItem, IndexPath, DrawerItemElement } from '@ui-kitten/components';
+import { DrawerHomeScreenProps } from '../../navigation/home.navigator';
 
-export const HomeDrawer = (props: any): DrawerElement => {
+const DrawerHeader = (): React.ReactElement<ImageBackgroundProps> => (
+  <ImageBackground
+    style={styles.header}
+    source={require('../../assets/image-background.jpeg')}
+  />
+);
+
+export const HomeDrawer = (props: DrawerHomeScreenProps): DrawerElement => {
 
   const onItemSelect = (index: IndexPath): void => {
     const selectedTabRoute: string = props.state.routeNames[index.row];
@@ -10,7 +18,7 @@ export const HomeDrawer = (props: any): DrawerElement => {
     props.navigation.closeDrawer();
   };
 
-  const createDrawerItemForRoute = (route: any, index: number): DrawerItemElement => {
+  const createDrawerItemForRoute = (route, index: number): DrawerItemElement => {
     const { options } = props.descriptors[route.key];
     return (
       <DrawerItem
@@ -22,11 +30,16 @@ export const HomeDrawer = (props: any): DrawerElement => {
   };
 
   return (
-    <SafeAreaLayout insets={SaveAreaInset.TOP}>
-      <Drawer
-        data={props.state.routes.map(createDrawerItemForRoute)}
-        onSelect={onItemSelect}
-      />
-    </SafeAreaLayout>
+    <Drawer
+      header={DrawerHeader}
+      onSelect={onItemSelect}>
+      {props.state.routes.map(createDrawerItemForRoute)}
+    </Drawer>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    height: 160,
+  },
+});

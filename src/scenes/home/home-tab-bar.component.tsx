@@ -1,20 +1,27 @@
 import React from 'react';
-import { BottomNavigation, BottomNavigationTab, Divider, BottomNavigationTabElement } from '@ui-kitten/components';
+import {
+  BottomNavigation,
+  BottomNavigationTab,
+  BottomNavigationTabElement,
+  Divider,
+} from '@ui-kitten/components';
+import { BottomHomeScreenProps } from '../../navigation/home.navigator';
 import { SafeAreaLayout, SafeAreaLayoutElement, SaveAreaInset } from '../../components/safe-area-layout.component';
 
-export const HomeTabBar = (props: { state: { routeNames: string[]; index: number | undefined; routes: any[]; }; navigation: { navigate: (arg0: string) => void; }; descriptors: { [x: string]: { options: any; }; }; }): SafeAreaLayoutElement => {
+export const HomeTabBar = (props: BottomHomeScreenProps): SafeAreaLayoutElement => {
 
   const onSelect = (index: number): void => {
     const selectedTabRoute: string = props.state.routeNames[index];
     props.navigation.navigate(selectedTabRoute);
   };
 
-  const createNavigationTabForRoute = (route: { key: string | number; }): BottomNavigationTabElement => {
+  const createNavigationTabForRoute = (route): BottomNavigationTabElement => {
     const { options } = props.descriptors[route.key];
     return (
       <BottomNavigationTab
         key={route.key}
         title={options.title}
+        // @ts-ignore: all Tab Screens strictly have UI Kitten Icon
         icon={options.tabBarIcon}
       />
     );
